@@ -3,9 +3,13 @@ from player import deal_cards
 import random as r
 import time
 
+# shuffles the deck after each round
 def new_round(deck):
-    r.shuffle(deck)
+    # shuffle for 10 times
+    for i in range(10):
+        r.shuffle(deck)
 
+# player takes turn finalizing the house
 def play_players(deck, players, dealer):
     dealer = dealer[0]
     print()
@@ -32,6 +36,7 @@ def play_players(deck, players, dealer):
             print(player.final_answer())
         print()
 
+# dealer hits until the house hand is 17
 def play_dealer(deck, players, dealer):
     dealer = dealer[0]
     print()
@@ -51,6 +56,7 @@ def play_dealer(deck, players, dealer):
 
     print(dealer.final_answer())
 
+# determines each player's winning condiiton
 def final_play(deck, players, dealer):
     print()
     dealer = dealer[0]
