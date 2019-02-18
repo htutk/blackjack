@@ -29,6 +29,7 @@ class Card():
 
     __repr__ = __str__
 
+# make a new deck, and returns as 52 cards
 def make_a_deck():
     suites = ['Spade', 'Heart', 'Diamond', 'Club']
     numbers = ['Ace']

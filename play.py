@@ -3,13 +3,18 @@ from player import deal_cards
 import random as r
 import time
 
+# shuffles the deck after each round
 def new_round(deck):
-    r.shuffle(deck)
+    # shuffle for 10 times
+    for i in range(10):
+        r.shuffle(deck)
 
+# player takes turn finalizing the house
 def play_players(deck, players, dealer):
     dealer = dealer[0]
     print()
 
+    # let each player finalize their house
     for i in range(len(players)):
         player = players[i]
         player_no = i + 1
@@ -20,9 +25,11 @@ def play_players(deck, players, dealer):
         while not player.turn_over and not player.blackjack:
             action = input('Hit (H) or Stand (S): ').lower()
             while True:
+                # hit
                 if action.startswith('h'):
                     player.hit(deck.pop())
                     break
+                # stand
                 elif action.startswith('s'):
                     player.stand()
                     break
@@ -32,12 +39,14 @@ def play_players(deck, players, dealer):
             print(player.final_answer())
         print()
 
+# dealer hits until the house hand is 17
 def play_dealer(deck, players, dealer):
     dealer = dealer[0]
     print()
     print('Dealer has {}'.format(dealer))
 
     while not dealer.turn_over and not dealer.blackjack:
+        # stand since the hosue is at least 17
         if dealer.total() >= 17:
             dealer.stand()
         else:
@@ -51,6 +60,7 @@ def play_dealer(deck, players, dealer):
 
     print(dealer.final_answer())
 
+# determines each player's winning condiiton
 def final_play(deck, players, dealer):
     print()
     dealer = dealer[0]
@@ -71,26 +81,33 @@ def final_play(deck, players, dealer):
             print('Player{}: '.format(player_no) + 'beats the dealer.')
     print()
 
+# main function to initialize a game
 def play():
-    deck = make_a_deck()
+    # make a new deck
     keep_playing = True
 
     while keep_playing:
+        deck = make_a_deck()
         new_round(deck)
 
+        # get the number of players from the user
         number_of_players = ''
-        while not number_of_players.isdigit():
+        while not number_of_players.isdigit() or int(number_of_players) > 25:
             number_of_players = input('Enter the number of players: ')
         number_of_players = int(number_of_players)
 
-        # +1 is for the dealer
+
+
+        # +1 is to include the dealer
         players = deal_cards(deck, number_of_players + 1)
 
+        # dealer is defined as a list since it will be referenced in other methods
         dealer = [players.pop()]
         play_players(deck, players, dealer)
         play_dealer(deck, players, dealer)
         final_play(deck, players, dealer)
 
+        # ask whether to keep playing
         keep_playing_answer = input('Keep playing(Y/N)? ').lower()
         while True:
             if keep_playing_answer.startswith('y'):
