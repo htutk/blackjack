@@ -84,17 +84,19 @@ def final_play(deck, players, dealer):
 # main function to initialize a game
 def play():
     # make a new deck
-    deck = make_a_deck()
     keep_playing = True
 
     while keep_playing:
+        deck = make_a_deck()
         new_round(deck)
 
         # get the number of players from the user
         number_of_players = ''
-        while not number_of_players.isdigit():
+        while not number_of_players.isdigit() or int(number_of_players) > 25:
             number_of_players = input('Enter the number of players: ')
         number_of_players = int(number_of_players)
+
+
 
         # +1 is to include the dealer
         players = deal_cards(deck, number_of_players + 1)
