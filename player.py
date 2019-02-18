@@ -1,5 +1,6 @@
 from card import Card
 
+# Player class keeps track of a player's house
 class Player():
     def __init__(self, deck, card1, card2, hit_cards):
         self.deck = deck
@@ -12,6 +13,7 @@ class Player():
     def modify_card1(self, card1):
         self.card1 = card1
 
+    # second card is dealt, check for blackjack
     def modify_card2(self, card2):
         self.card2 = card2
         self.check_blackjack()
@@ -23,6 +25,7 @@ class Player():
     def stand(self):
         self.turn_over = True
 
+    # tallies up the total of the house
     def total(self):
         two_cards_total = self.card1.get_number() + self.card2.get_number()
         hit_cards_total = 0
@@ -30,12 +33,14 @@ class Player():
             hit_cards_total += card.get_number()
         return two_cards_total + hit_cards_total
 
+    # turn is over if the house >= 21
     def check_turn_over(self, total):
         if total >= 21:
             self.turn_over = True
         if total == 21:
             self.blackjack = True
 
+    # internal function to check if a house is 21
     def check_blackjack(self):
         has_ace_card = self.card1.get_number() == 1 or self.card2.get_number() == 1
         if not has_ace_card:
@@ -47,9 +52,11 @@ class Player():
             if other.get_number() == 10:
                 self.blackjack = True
 
+    # for dealer to show the first card
     def show_one_card(self):
         return str(self.card1)
 
+    # final condiiton of a house
     def final_answer(self):
         if self.blackjack:
             return 'BlackJack!'
@@ -58,9 +65,11 @@ class Player():
         else:
             return str(self.total())
 
+    # check if a player is tied with other player
     def __eq__(self, other):
         return self.final_answer() == other.final_answer()
 
+    # check if a player's hand beats the other
     def __gt__(self, other):
         if not self.blackjack and other.blackjack:
             return False
@@ -86,6 +95,7 @@ class Player():
     __repr__ = __str__
 
 
+# deal cards to all players including the dealer
 def deal_cards(deck, number_of_players):
     players = []
     for i in range(number_of_players):

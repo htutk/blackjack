@@ -14,6 +14,7 @@ def play_players(deck, players, dealer):
     dealer = dealer[0]
     print()
 
+    # let each player finalize their house
     for i in range(len(players)):
         player = players[i]
         player_no = i + 1
@@ -24,9 +25,11 @@ def play_players(deck, players, dealer):
         while not player.turn_over and not player.blackjack:
             action = input('Hit (H) or Stand (S): ').lower()
             while True:
+                # hit
                 if action.startswith('h'):
                     player.hit(deck.pop())
                     break
+                # stand
                 elif action.startswith('s'):
                     player.stand()
                     break
@@ -43,6 +46,7 @@ def play_dealer(deck, players, dealer):
     print('Dealer has {}'.format(dealer))
 
     while not dealer.turn_over and not dealer.blackjack:
+        # stand since the hosue is at least 17
         if dealer.total() >= 17:
             dealer.stand()
         else:
@@ -77,26 +81,31 @@ def final_play(deck, players, dealer):
             print('Player{}: '.format(player_no) + 'beats the dealer.')
     print()
 
+# main function to initialize a game
 def play():
+    # make a new deck
     deck = make_a_deck()
     keep_playing = True
 
     while keep_playing:
         new_round(deck)
 
+        # get the number of players from the user
         number_of_players = ''
         while not number_of_players.isdigit():
             number_of_players = input('Enter the number of players: ')
         number_of_players = int(number_of_players)
 
-        # +1 is for the dealer
+        # +1 is to include the dealer
         players = deal_cards(deck, number_of_players + 1)
 
+        # dealer is defined as a list since it will be referenced in other methods
         dealer = [players.pop()]
         play_players(deck, players, dealer)
         play_dealer(deck, players, dealer)
         final_play(deck, players, dealer)
 
+        # ask whether to keep playing
         keep_playing_answer = input('Keep playing(Y/N)? ').lower()
         while True:
             if keep_playing_answer.startswith('y'):
