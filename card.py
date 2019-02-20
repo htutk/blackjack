@@ -6,6 +6,8 @@ class Card():
         self.number = number
         self.suite = suite
         self.face_cards = ['Jack', 'Queen', 'King']
+        self.suite_dict = {'Spade': u'\u2660', 'Heart': u'\u2666', \
+        'Diamond': u'\u2665', 'Club': u'\u2663'}
 
     def modify_number(self, number):
         self.number = number
@@ -25,7 +27,7 @@ class Card():
         return self.suite
 
     def __str__(self):
-        return self.number + " of " + self.suite
+        return self.number + ' ' + self.suite_dict[self.suite]
 
     __repr__ = __str__
 
