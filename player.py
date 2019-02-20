@@ -8,6 +8,7 @@ class Player():
         self.card2 = card2
         self.hit_cards = hit_cards
         self.turn_over = False
+        self.busted = False
         self.blackjack = False
         self.has_ace_card = False
 
@@ -65,12 +66,12 @@ class Player():
         for amplifier in amplifiers:
              temp_total.append(total_not_ace + amplifier)
 
-        if not self.turn_over:
+        if not self.blackjack or not self.busted:
             for t in temp_total:
                 if t > 21:
                     temp_total.remove(t)
             total = max(temp_total)
-        else:
+        elif self.busted:
             total = min(temp_total)
 
         return total
@@ -81,6 +82,8 @@ class Player():
             self.turn_over = True
         if total == 21:
             self.blackjack = True
+        if total > 21:
+            self.busted = True
 
     def check_one_ace(self):
         self.has_ace_card = self.card1.get_number() == 1 or self.card2.get_number() == 1

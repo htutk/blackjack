@@ -1,4 +1,5 @@
 from play import play
+from time import sleep
 import sys
 
 def main():
@@ -9,4 +10,5 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         #print('\nThanks for playing blackjack!')
-        sys.exit('\nThanks for playing blackjack!')
+        print('\n\nThanks for playing blackjack!')
+        input('Press Enter to close the window...\n')

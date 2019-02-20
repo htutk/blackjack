@@ -51,11 +51,11 @@ def play_dealer(deck, players, dealer):
             dealer.stand()
         else:
             print(dealer.final_answer())
+            dealer.hit(deck.pop())
             print('Hitting', end='')
             for i in range(3):
-                time.sleep(1)
+                time.sleep(0.5)
                 print('.', end='')
-            dealer.hit(deck.pop())
             print('\nDealer has {}'.format(dealer))
 
     print(dealer.final_answer())
@@ -81,8 +81,17 @@ def final_play(deck, players, dealer):
             print('Player{}: '.format(player_no) + 'beats the dealer.')
     print()
 
+
+# prints out introductory prompts
+def intro():
+    print(r'''
+Welcome to Blackjack game! Make your choices carefully.
+
+    ''')
+
 # main function to initialize a game
 def play():
+    intro()
     # make a new deck
     keep_playing = True
 
@@ -96,8 +105,6 @@ def play():
         while not number_of_players.isdigit() or int(number_of_players) > 10:
             number_of_players = input('Enter the number of players (allowed 10): ')
         number_of_players = int(number_of_players)
-
-
 
         # +1 is to include the dealer
         players = deal_cards(deck, number_of_players + 1)
@@ -115,7 +122,8 @@ def play():
                 break
             elif keep_playing_answer.startswith('n'):
                 keep_playing = False
-                print('Thanks for playing blackjack!')
+                print('\n\nThanks for playing blackjack!')
+                input('Press Enter close the window...\n')
                 break
             else:
                 keep_playing_answer = input('Keep playing(Y/N)? ').lower()
