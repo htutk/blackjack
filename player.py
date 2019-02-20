@@ -40,26 +40,38 @@ class Player():
             return self.total_with_ace()
 
     def total_with_ace(self):
-        ace = self.card1 if self.card1.get_number() == 1 else self.card2
-        other = self.card2 if self.card1.get_number() == 1 else self.card1
+        temp_house = [self.card1, self.card2]
+        temp_house.extend(self.hit_cards)
 
-        large_total = 11 + other.get_number()
-        small_total = ace.get_number() + other.get_number()
+        total = 0;
+        ace_count = 0;
 
-        total = max(large_total, small_total)
+        for card in temp_house:
+            if card.get_number() == 1:
+                ace_count += 1
 
-        if large_total > 21:
-            total = small_total
+        # 1, 11 for 1 Ace
+        # 2, 12 for 2 Ace's
+        # 3, 13 for 3 Ace's
+        # 4, 14 for 4 Ace's
+        amplifiers = [ace_count, ace_count + 10]
 
-        if self.hit_cards:
-            hit_cards_total = 0
-            for card in self.hit_cards:
-                hit_cards_total += card.get_number()
+        total_not_ace = 0
+        for card in temp_house:
+            if card.get_number() != 1:
+                total_not_ace += card.get_number()
 
-            if total + hit_cards_total > 21:
-                total = small_total + hit_cards_total
-            else:
-                total = large_total + hit_cards_total
+        temp_total = []
+        for amplifier in amplifiers:
+             temp_total.append(total_not_ace + amplifier)
+
+        if not self.turn_over:
+            for t in temp_total:
+                if t > 21:
+                    temp_total.remove(t)
+            total = max(temp_total)
+        else:
+            total = min(temp_total)
 
         return total
 
