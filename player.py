@@ -9,6 +9,7 @@ class Player():
         self.hit_cards = hit_cards
         self.turn_over = False
         self.blackjack = False
+        self.has_ace_card = False
 
     def modify_card1(self, card1):
         self.card1 = card1
@@ -16,10 +17,12 @@ class Player():
     # second card is dealt, check for blackjack
     def modify_card2(self, card2):
         self.card2 = card2
+        self.check_one_ace()
         self.check_blackjack()
 
     def hit(self, new_hit_card):
         self.hit_cards.append(new_hit_card)
+        self.check_one_ace()
         self.check_turn_over(self.total())
 
     def stand(self):
@@ -27,11 +30,38 @@ class Player():
 
     # tallies up the total of the house
     def total(self):
-        two_cards_total = self.card1.get_number() + self.card2.get_number()
-        hit_cards_total = 0
-        for card in self.hit_cards:
-            hit_cards_total += card.get_number()
-        return two_cards_total + hit_cards_total
+        if not self.has_ace_card:
+            two_cards_total = self.card1.get_number() + self.card2.get_number()
+            hit_cards_total = 0
+            for card in self.hit_cards:
+                hit_cards_total += card.get_number()
+            return two_cards_total + hit_cards_total
+        else:
+            return self.total_with_ace()
+
+    def total_with_ace(self):
+        ace = self.card1 if self.card1.get_number() == 1 else self.card2
+        other = self.card2 if self.card1.get_number() == 1 else self.card1
+
+        large_total = 11 + other.get_number()
+        small_total = ace.get_number() + other.get_number()
+
+        total = max(large_total, small_total)
+
+        if large_total > 21:
+            total = small_total
+
+        if self.hit_cards:
+            hit_cards_total = 0
+            for card in self.hit_cards:
+                hit_cards_total += card.get_number()
+
+            if total + hit_cards_total > 21:
+                total = small_total + hit_cards_total
+            else:
+                total = large_total + hit_cards_total
+
+        return total
 
     # turn is over if the house >= 21
     def check_turn_over(self, total):
@@ -40,12 +70,16 @@ class Player():
         if total == 21:
             self.blackjack = True
 
+    def check_one_ace(self):
+        self.has_ace_card = self.card1.get_number() == 1 or self.card2.get_number() == 1
+        for hit_card in self.hit_cards:
+            if hit_card.get_number() == 1:
+                self.has_ace_card = True
+
+
     # internal function to check if a house is 21
     def check_blackjack(self):
-        has_ace_card = self.card1.get_number() == 1 or self.card2.get_number() == 1
-        if not has_ace_card:
-            self.blackjack = False
-        else:
+        if self.has_ace_card:
             ace = self.card1 if self.card1.get_number() == 1 else self.card2
             other = self.card2 if self.card1.get_number() == 1 else self.card1
 
@@ -61,7 +95,7 @@ class Player():
         if self.blackjack:
             return 'BlackJack!'
         elif self.total() > 21:
-            return 'Busted...'
+            return str(self.total()) + ', Busted...'
         else:
             return str(self.total())
 

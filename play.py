@@ -91,9 +91,10 @@ def play():
         new_round(deck)
 
         # get the number of players from the user
+        # 10 players allowed
         number_of_players = ''
-        while not number_of_players.isdigit() or int(number_of_players) > 25:
-            number_of_players = input('Enter the number of players: ')
+        while not number_of_players.isdigit() or int(number_of_players) > 10:
+            number_of_players = input('Enter the number of players (allowed 10): ')
         number_of_players = int(number_of_players)
 
 
