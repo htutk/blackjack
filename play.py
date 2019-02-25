@@ -85,6 +85,7 @@ def final_play(deck, players, dealer):
 # prints out introductory prompts
 def intro():
     print(r'''
+---------------    by Alex Htut    --------------------
 Welcome to Blackjack game! Make your choices carefully.
 
     ''')

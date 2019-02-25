@@ -66,7 +66,7 @@ class Player():
         for amplifier in amplifiers:
              temp_total.append(total_not_ace + amplifier)
 
-        if not self.blackjack or not self.busted:
+        if not self.blackjack and not self.busted:
             for t in temp_total:
                 if t > 21:
                     temp_total.remove(t)
